@@ -30,6 +30,7 @@ class Solution(object):
             elif stack and bracket == brackets[stack[-1]]:
                 stack.pop()
             else:
+                # test cases: [), )
                 return False
 
         return len(stack) == 0
