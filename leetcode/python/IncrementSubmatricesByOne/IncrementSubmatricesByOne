@@ -1,0 +1,22 @@
+"""
+Time Complexity:	 q + n^2 or n^2
+Space:			 n^2; diff matrix is n+1
+Algorithm:		 Difference Matrix & Inclusion-Exclusion Principle
+"""
+class Solution:
+    def rangeAddQueries(self, n: int, queries: List[List[int]]) -> List[List[int]]:
+        diff = [[0] * (n+1) for _ in range(n+1)]
+        for r1, c1, r2, c2 in queries:
+            diff[r1][c1] += 1 # topleft
+            diff[r2+1][c2+1] += 1 #bottomright
+            diff[r2+1][c1] -= 1 #bottomleft
+            diff[r1][c2+1] -= 1 #topright
+        
+        mat = [[0] * n for _ in range(n)]
+        for i in range(n):
+            for j in range(n):
+                event_A = 0 if i == 0 else mat[i-1][j]
+                event_B = 0 if j == 0 else mat[i][j-1]
+                overlap = 0 if i == 0 or j == 0 else mat[i-1][j-1]
+                mat[i][j] = diff[i][j] + event_A + event_B - overlap
+        return mat
